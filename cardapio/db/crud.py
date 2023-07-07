@@ -27,14 +27,26 @@ def clear_db(db: Session):
     return {"message": "Banco de dados limpo"}
 
 def create_produto(db: Session, produto: schemas.ProdutoCreate):
-    db_produto = models.Produto(nome=produto.nome,
-                                preco=produto.preco,
-                                descricao=produto.descricao, 
-                                tipo=produto.tipo)
-    db.add(db_produto)
-    db.commit()
-    db.refresh(db_produto)
-    return db_produto
+    try:
+        db_produto = models.Produto(nome=produto.nome,
+                                    preco=produto.preco,
+                                    descricao=produto.descricao, 
+                                    tipo=produto.tipo)
+        db.add(db_produto)
+        db.commit()
+        db.refresh(db_produto)
+        return db_produto
+    except:
+        if produto.nome == "":
+            {"message":"produto sem nome"}
+        if produto.preco<=0:
+             {"message":"o valor do produto não pode ser negativo"}
+        if produto.descricao == "":
+             {"message":"Produto sem descrição"}
+        if produto.tipo != 0 and produto.tipo != 1:
+            {"message":"Tipo desconhecido"}
+
+        
 
 def pedir_produto(db: Session, pedido: schemas.PedidoCreate):
     db_pedido = models.Pedido(nome_produto=pedido.nome_produto)

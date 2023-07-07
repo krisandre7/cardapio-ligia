@@ -37,11 +37,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: bool
-
 items: list = []
 
 @app.get("/")
@@ -64,9 +59,11 @@ def read_produtos(db: Session = Depends(get_db)):
 
 @app.post("/produtos/")
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
-    crud.create_produto(db, produto)
-    return {"message": "Produto criado com sucesso"}
-
+    if crud.create_produto(db, produto):
+        return JSONResponse(status_code=200, content={"message": "Produto criado com sucesso"})
+    else:
+        return JSONResponse(status_code=200, content={"message": "Erro ao criar o produto"})
+    
 @app.post("/pedido/{nome_produto}")
 def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
     pedido = schemas.PedidoCreate(nome_produto=nome_produto)
