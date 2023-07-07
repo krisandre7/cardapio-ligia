@@ -13,7 +13,7 @@ else
     docker run --name mysql-ligia  -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=prometheus -e MYSQL_PASSWORD=12345 -e MYSQL_DATABASE=prometheus-mysql -d mysql:8.0.33
 fi
 
-docker container run --name cardapio-mysql -v $(pwd):/apps -it -p 5000:5000  cardapio-ligia-backend
+docker container run --name cardapio-mysql -v $(pwd):/apps -w /apps/cardapio -it -p 5000:5000 cardapio-ligia-backend
 
 # # --name    nome do container
 # # -v        mapear volume local:dentro_container
@@ -21,8 +21,9 @@ docker container run --name cardapio-mysql -v $(pwd):/apps -it -p 5000:5000  car
 # # -p        externalizar uma porta para acesso internamente ao container
 
 docker container rm -f cardapio-mysql
+docker container rm -f mysql-ligia
 
-docker container stop mysql-ligia
+# docker container stop mysql-ligia
 
 # rm -f     apaga um container (-f )
 
