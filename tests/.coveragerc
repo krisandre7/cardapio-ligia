@@ -1,5 +1,5 @@
 [run]
-source = ../lista_supermercado_mysql
+source = ../cardapio
 
 omit = \
     */.local/*, \

@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
 
 try:
     from db import models, schemas
@@ -44,9 +46,13 @@ items: list = []
 
 @app.get("/")
 def read_root():
-    return {"Salve Salve": "Família"}
+    return JSONResponse(status_code=200, content={"message": "Salve Salve Família"})
 
-@app.get("/produto/{produto_id}", response_model=list[schemas.Produto])
+@app.delete("/")
+def clear_db(db: Session = Depends(get_db)):
+    return crud.clear_db(db)
+
+@app.get("/produtos/{produto_id}", response_model=list[schemas.Produto])
 def read_produto(produto_id: int, db: Session = Depends(get_db)):
     produto = crud.get_produto(db, produto_id)
     return produto
@@ -68,7 +74,7 @@ def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
         crud.pedir_produto(db, pedido)
     except HTTPException as e:
         raise e
-    return {"message": "Produto adicionado a pedido!"}
+    return JSONResponse(status_code=200, content={"message": "Produto pedido com sucesso!"})
     
 
 if __name__ == '__main__':

@@ -15,6 +15,17 @@ def get_produto(db: Session, id_produto: int):
 def get_produtos(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Produto).offset(skip).limit(limit).all()
 
+def delete_produtos(db: Session):
+    db.query(models.Produto).delete()
+    db.commit()
+    return {"message": "Produtos deletados com sucesso"}
+
+def clear_db(db: Session):
+    db.query(models.Pedido).delete()
+    db.query(models.Produto).delete()
+    db.commit()
+    return {"message": "Banco de dados limpo"}
+
 def create_produto(db: Session, produto: schemas.ProdutoCreate):
     db_produto = models.Produto(nome=produto.nome,
                                 preco=produto.preco,
@@ -31,7 +42,7 @@ def pedir_produto(db: Session, pedido: schemas.PedidoCreate):
     pedido = db.query(models.Pedido).filter(models.Pedido.nome_produto == db_pedido.nome_produto).first()
     
     if pedido is not None:
-        raise HTTPException(status_code=404, detail="Produto já pedido")
+        raise HTTPException(status_code=400, detail="Produto já pedido")
     
     try:
         db.add(db_pedido)
