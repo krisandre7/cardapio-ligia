@@ -18,8 +18,7 @@ class Pedido(Base):
 class Produto(Base):
     __tablename__ = "produtos"
 
-    id = Column(Integer, primary_key=True, index=True)
-    nome = Column(String(50), unique=True, index=True)
+    nome = Column(String(50), primary_key=True, index=True)
     descricao = Column(String(100))
     preco = Column(Float)
     tipo = Column(Integer)
