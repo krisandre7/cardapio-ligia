@@ -10,9 +10,13 @@ def get_produtos(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Produto).offset(skip).limit(limit).all()
 
 def create_produto(db: Session, produto: schemas.ProdutoCreate):
-    db_produto = models.Produto(nome=produto.nome, descricao=produto.descricao, preco=produto.preco, tipo=produto.tipo)
+    db_produto = models.Produto(nome=produto.nome,
+                                preco=produto.preco,
+                                descricao=produto.descricao, 
+                                tipo=produto.tipo)
     db.add(db_produto)
     db.commit()
+    print("no le epic pizza time")
     db.refresh(db_produto)
     return db_produto
 

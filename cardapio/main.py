@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from db import models, schemas
 from db.database import SessionLocal, engine
-from .db import crud
+from db import crud
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -53,9 +53,10 @@ def read_produtos(db: Session = Depends(get_db)):
     produtos = crud.get_produtos(db)
     return produtos
 
-@app.post("/produtos/", response_model=schemas.Produto)
+@app.post("/produtos/")
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
-    produto = crud.create_produto(db, produto)
+    print("le epic pizza time")
+    crud.create_produto(db, produto)
     return {"message": "Produto criado com sucesso"}
 
 if __name__ == '__main__':

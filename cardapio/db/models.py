@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -19,8 +19,8 @@ class Produto(Base):
     __tablename__ = "produtos"
 
     id = Column(Integer, primary_key=True, index=True)
-    nome = Column(String, unique=True, index=True)
-    descricao = Column(String)
-    preco = Column(Integer)
+    nome = Column(String(50), unique=True, index=True)
+    descricao = Column(String(100))
+    preco = Column(Float)
     tipo = Column(Integer)
     
