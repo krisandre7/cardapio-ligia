@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from db import models, schemas
+from fastapi import HTTPException
 
 
 def get_produto(db: Session, id_produto: int):
@@ -23,15 +25,12 @@ def get_pedido(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Pedido).offset(skip).limit(limit).all()
 
 def pedir_produto(db: Session, produto: schemas.PedidoCreate):
-    db_produto = models.Pedido(produto_id=produto.nome_produto)
-    db.add(db_produto)
-    db.commit()
-    db.refresh(db_produto)
+    try:
+        db_produto = models.Pedido(nome_produto=produto.nome_produto)
+        db.add(db_produto)
+        db.commit()
+        db.refresh(db_produto)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
     return db_produto
-
-def create_pedido(db: Session, pedido: schemas.PedidoCreate):
-    db_pedido = models.Pedido(nome_produto=pedido.nome_produto)
-    db.add(db_pedido)
-    db.commit()
-    db.refresh(db_pedido)
-    return db_pedido
