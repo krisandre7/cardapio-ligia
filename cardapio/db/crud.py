@@ -24,7 +24,7 @@ def get_pedido(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Pedido).offset(skip).limit(limit).all()
 
 def pedir_produto(db: Session, produto: schemas.PedidoCreate):
-    db_produto = models.Pedido(produto_id=produto.produto_id)
+    db_produto = models.Pedido(produto_id=produto.nome_produto)
     db.add(db_produto)
     db.commit()
     db.refresh(db_produto)
