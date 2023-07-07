@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/vs,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=vs,python
 
+*.pem
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
