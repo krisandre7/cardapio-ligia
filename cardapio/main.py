@@ -58,5 +58,10 @@ def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)
     crud.create_produto(db, produto)
     return {"message": "Produto criado com sucesso"}
 
+@app.post("/pedido/")
+def create_pedido(pedido: schemas.PedidoCreate, db: Session = Depends(get_db)):
+    crud.create_pedido(db, pedido)
+    return {"message": "Pedido criado com sucesso"}
+
 if __name__ == '__main__':
     uvicorn.run("main:app", host='0.0.0.0', port=5000, log_level="info", reload=True)
