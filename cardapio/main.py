@@ -55,10 +55,8 @@ def read_produtos(db: Session = Depends(get_db)):
 
 @app.post("/produtos/")
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
-    print("le epic pizza time")
     crud.create_produto(db, produto)
     return {"message": "Produto criado com sucesso"}
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host='0.0.0.0', port=5000, log_level="info", reload=True)
-    print("running")
