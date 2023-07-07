@@ -21,16 +21,19 @@ def create_produto(db: Session, produto: schemas.ProdutoCreate):
     db.refresh(db_produto)
     return db_produto
 
-def get_pedido(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Pedido).offset(skip).limit(limit).all()
-
-def pedir_produto(db: Session, produto: schemas.PedidoCreate):
+def pedir_produto(db: Session, pedido: schemas.PedidoCreate):
+    db_pedido = models.Pedido(nome_produto=pedido.nome_produto)
+    
+    pedido = db.query(models.Pedido).filter(models.Pedido.nome_produto == db_pedido.nome_produto).first()
+    
+    if pedido is not None:
+        raise HTTPException(status_code=404, detail="Produto já pedido")
+    
     try:
-        db_produto = models.Pedido(nome_produto=produto.nome_produto)
-        db.add(db_produto)
+        db.add(db_pedido)
         db.commit()
-        db.refresh(db_produto)
+        db.refresh(db_pedido)
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=404, detail="Produto não encontrado")
-    return db_produto
+    return db_pedido

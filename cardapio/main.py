@@ -65,7 +65,7 @@ def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
         crud.pedir_produto(db, pedido)
     except HTTPException as e:
         raise e
-    return {"message": "Pedido criado com sucesso"}
+    return {"message": "Produto adicionado a pedido!"}
     
 
 if __name__ == '__main__':
