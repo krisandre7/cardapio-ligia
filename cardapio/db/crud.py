@@ -16,7 +16,6 @@ def create_produto(db: Session, produto: schemas.ProdutoCreate):
                                 tipo=produto.tipo)
     db.add(db_produto)
     db.commit()
-    print("no le epic pizza time")
     db.refresh(db_produto)
     return db_produto
 
@@ -27,5 +26,12 @@ def pedir_produto(db: Session, produto: schemas.PedidoCreate):
     db_produto = models.Pedido(produto_id=produto.nome_produto)
     db.add(db_produto)
     db.commit()
-    db.refresh(db_produto)
-    return db_produto
+    db.refresh(db_pedido)
+    return db_pedido
+
+def create_pedido(db: Session, pedido: schemas.PedidoCreate):
+    db_pedido = models.Pedido(nome_produto=pedido.nome_produto)
+    db.add(db_pedido)
+    db.commit()
+    db.refresh(db_pedido)
+    return db_pedido
