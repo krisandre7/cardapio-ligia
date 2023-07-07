@@ -1,0 +1,8 @@
+[run]
+source = ../cardapio
+
+omit = \
+    */.local/*, \
+    /usr/*, \
+    ../tests/*, \
+    *\__init__.py 

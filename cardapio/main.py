@@ -1,15 +1,20 @@
-from typing import Union
-
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from db import models, schemas
-from db.database import SessionLocal, engine
-from db import crud
 
+try:
+    from db import models, schemas
+    from db.database import SessionLocal, engine
+    from db import crud
+except ImportError:
+    from cardapio.db import models, schemas, crud
+    from cardapio.db.database import SessionLocal, engine
+
+# Configuração de acesso ao Banco de Dados
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -41,9 +46,13 @@ items: list = []
 
 @app.get("/")
 def read_root():
-    return {"Salve Salve": "Família"}
+    return JSONResponse(status_code=200, content={"message": "Salve Salve Família"})
 
-@app.get("/produto/{produto_id}", response_model=list[schemas.Produto])
+@app.delete("/")
+def clear_db(db: Session = Depends(get_db)):
+    return crud.clear_db(db)
+
+@app.get("/produtos/{produto_id}", response_model=list[schemas.Produto])
 def read_produto(produto_id: int, db: Session = Depends(get_db)):
     produto = crud.get_produto(db, produto_id)
     return produto
@@ -57,6 +66,16 @@ def read_produtos(db: Session = Depends(get_db)):
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
     crud.create_produto(db, produto)
     return {"message": "Produto criado com sucesso"}
+
+@app.post("/pedido/{nome_produto}")
+def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
+    pedido = schemas.PedidoCreate(nome_produto=nome_produto)
+    try:
+        crud.pedir_produto(db, pedido)
+    except HTTPException as e:
+        raise e
+    return JSONResponse(status_code=200, content={"message": "Produto pedido com sucesso!"})
+    
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host='0.0.0.0', port=5000, log_level="info", reload=True)
