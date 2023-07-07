@@ -1,15 +1,18 @@
-from typing import Union
-
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-from db import models, schemas
-from db.database import SessionLocal, engine
-from db import crud
+try:
+    from db import models, schemas
+    from db.database import SessionLocal, engine
+    from db import crud
+except ImportError:
+    from cardapio.db import models, schemas, crud
+    from cardapio.db.database import SessionLocal, engine
 
+# Configuração de acesso ao Banco de Dados
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()

@@ -1,8 +1,12 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from db import models, schemas
 from fastapi import HTTPException
+
+try:
+    from db import models, schemas
+except ImportError:
+    from cardapio.db import models, schemas
 
 
 def get_produto(db: Session, id_produto: int):
