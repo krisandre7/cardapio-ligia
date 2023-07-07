@@ -26,8 +26,8 @@ def pedir_produto(db: Session, produto: schemas.PedidoCreate):
     db_produto = models.Pedido(produto_id=produto.nome_produto)
     db.add(db_produto)
     db.commit()
-    db.refresh(db_pedido)
-    return db_pedido
+    db.refresh(db_produto)
+    return db_produto
 
 def create_pedido(db: Session, pedido: schemas.PedidoCreate):
     db_pedido = models.Pedido(nome_produto=pedido.nome_produto)
