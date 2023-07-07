@@ -10,9 +10,9 @@ class Pedido(Base):
     __tablename__ = "pedidos"
 
     id = Column(Integer, primary_key=True, index=True)
-    product_id = Column(Integer, ForeignKey("produtos.id"))
+    nome_produto = Column(String(50), ForeignKey("produtos.nome"))
 
-    product = relationship("Produto")
+    produto = relationship("Produto")
 
 # Child
 class Produto(Base):

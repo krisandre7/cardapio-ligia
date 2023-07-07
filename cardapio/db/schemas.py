@@ -20,7 +20,7 @@ class Produto(ProdutoBase):
 
 
 class PedidoBase(BaseModel):
-    produto_id: int
+    nome_produto: str
 
 
 class PedidoCreate(PedidoBase):
@@ -28,7 +28,7 @@ class PedidoCreate(PedidoBase):
 
 class Pedido(PedidoBase):
     id: int
-    product: Produto
+    produto: Produto
 
     class Config:
         orm_mode = True
