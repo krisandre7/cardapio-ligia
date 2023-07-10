@@ -59,10 +59,12 @@ def read_produtos(db: Session = Depends(get_db)):
 
 @app.post("/produtos/")
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
-    if crud.create_produto(db, produto):
-        return JSONResponse(status_code=200, content={"message": "Produto criado com sucesso"})
-    else:
-        return JSONResponse(status_code=200, content={"message": "Erro ao criar o produto"})
+    try:
+        produto = crud.create_produto(db, produto)
+    except  HTTPException as e:
+        raise e
+    return JSONResponse(status_code=200, content={"message": "Produto adicionado com sucesso"})
+   
     
 @app.post("/pedido/{nome_produto}")
 def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):

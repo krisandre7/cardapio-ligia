@@ -27,6 +27,19 @@ def clear_db(db: Session):
     return {"message": "Banco de dados limpo"}
 
 def create_produto(db: Session, produto: schemas.ProdutoCreate):
+    #verifica se o produto é vazio
+    if produto.nome == "" or produto.nome == " ":
+        raise HTTPException(status_code=400, detail="Nome invalido")
+    #verifica se a descrição é vazio
+    if not produto.descricao:
+        raise HTTPException(status_code=400, detail="A descrição não pode ser vazio")
+    #verifica se o preço é diferente de zero ou negativo
+    if produto.preco <= 0:
+        raise HTTPException(status_code=400, detail="O valor precisa ser maior que zero")
+    #verifica o tipo do produto
+    if produto.tipo != 0 and produto.tipo != 1:
+        raise HTTPException(status_code=400, detail="Tipo do produto desconhecido")
+    
     try:
         db_produto = models.Produto(nome=produto.nome,
                                     preco=produto.preco,
@@ -35,17 +48,10 @@ def create_produto(db: Session, produto: schemas.ProdutoCreate):
         db.add(db_produto)
         db.commit()
         db.refresh(db_produto)
-        return db_produto
-    except:
-        if produto.nome == "":
-            {"message":"produto sem nome"}
-        if produto.preco<=0:
-             {"message":"o valor do produto não pode ser negativo"}
-        if produto.descricao == "":
-             {"message":"Produto sem descrição"}
-        if produto.tipo != 0 and produto.tipo != 1:
-            {"message":"Tipo desconhecido"}
-
+    except IntegrityError:
+        #verifica se o produto já foi adicionado no banco de dados
+        raise HTTPException(status_code=400, detail="Produto já foi adicionado")
+    return db_produto
         
 
 def pedir_produto(db: Session, pedido: schemas.PedidoCreate):
