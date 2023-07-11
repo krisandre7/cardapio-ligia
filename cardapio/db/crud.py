@@ -36,13 +36,41 @@ def create_produto(db: Session, produto: schemas.ProdutoCreate):
     db.refresh(db_produto)
     return db_produto
 
-def pedir_produto(db: Session, pedido: schemas.PedidoCreate):
-    db_pedido = models.Pedido(nome_produto=pedido.nome_produto)
+def update_produto(db: Session, produto: schemas.ProdutoCreate):
+    db_produto = models.Produto(nome=produto.nome, 
+                                preco=produto.preco, 
+                                tipo=produto.tipo, 
+                                descricao=produto.descricao)
+    produto_antigo = db.query(models.Produto).filter(models.Produto.nome == db_produto.nome).first()
     
-    pedido = db.query(models.Pedido).filter(models.Pedido.nome_produto == db_pedido.nome_produto).first()
+    if produto_antigo is None:
+        raise HTTPException(status_code=400, detail="Produto com esse nome não existe.")
+    
+    try: 
+        produto_antigo.descricao = db_produto.descricao
+        produto_antigo.preco =  db_produto.preco
+        produto_antigo.tipo = db_produto.tipo
+        db.commit()
+        db.refresh(produto_antigo)
+    except IntegrityError as e:
+        print(e)
+        db.rollback()
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
+
+
+def pedir_produto(db: Session, nome_produto: str):
+    
+    produto = db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
+    
+    if produto is None:
+        raise HTTPException(status_code=400, detail="Produto não existe")
+    
+    pedido = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
     
     if pedido is not None:
         raise HTTPException(status_code=400, detail="Produto já pedido")
+    
+    db_pedido = models.Pedido(id_pedido=produto.id)
     
     try:
         db.add(db_pedido)

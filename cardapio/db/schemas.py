@@ -13,13 +13,14 @@ class ProdutoCreate(ProdutoBase):
 
 
 class Produto(ProdutoBase):
+    id: int
 
     class Config:
         orm_mode = True
 
 
 class PedidoBase(BaseModel):
-    nome_produto: str
+    id_produto: int
 
 
 class PedidoCreate(PedidoBase):
