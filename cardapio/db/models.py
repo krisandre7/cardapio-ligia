@@ -13,7 +13,7 @@ class Pedido(Base):
     __tablename__ = "pedidos"
 
     id = Column(Integer, primary_key=True, index=True)
-    nome_produto = Column(String(50), ForeignKey("produtos.nome"))
+    id_produto = Column(Integer, ForeignKey("produtos.id"))
 
     produto = relationship("Produto")
 
@@ -21,7 +21,8 @@ class Pedido(Base):
 class Produto(Base):
     __tablename__ = "produtos"
 
-    nome = Column(String(50), primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
+    nome = Column(String(50), unique=True)
     descricao = Column(String(100))
     preco = Column(Float)
     tipo = Column(Integer)

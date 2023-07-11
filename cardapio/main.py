@@ -67,11 +67,18 @@ def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)
     crud.create_produto(db, produto)
     return {"message": "Produto criado com sucesso"}
 
+@app.put("/produtos/")
+def update_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
+    try:
+        crud.update_produto(db, produto)
+    except HTTPException as e:
+        raise e
+    return {"message": "Produto atualizado com sucesso!"}
+
 @app.post("/pedido/{nome_produto}")
 def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
-    pedido = schemas.PedidoCreate(nome_produto=nome_produto)
     try:
-        crud.pedir_produto(db, pedido)
+        crud.pedir_produto(db, nome_produto)
     except HTTPException as e:
         raise e
     return JSONResponse(status_code=200, content={"message": "Produto pedido com sucesso!"})
