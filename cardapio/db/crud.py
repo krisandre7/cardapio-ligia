@@ -70,7 +70,7 @@ def pedir_produto(db: Session, nome_produto: str):
     if pedido is not None:
         raise HTTPException(status_code=400, detail="Produto já pedido")
     
-    db_pedido = models.Pedido(id_pedido=produto.id)
+    db_pedido = models.Pedido(id_produto=produto.id)
     
     try:
         db.add(db_pedido)
