@@ -82,7 +82,19 @@ def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
     except HTTPException as e:
         raise e
     return JSONResponse(status_code=200, content={"message": "Produto pedido com sucesso!"})
-    
+
+@app.get("/pedido/")
+def efetuar_pedido(db: Session = Depends(get_db)):
+    valor_total = 0
+    lista_de_pedido = list()
+    try:
+        [valor_total, lista_de_pedido] = crud.efetuar_pedido()
+    except HTTPException as e:
+        raise e 
+    return JSONResponse(status_code=200, content={"valor_total": valor_total,
+        "Lista_de_pedidos": lista_de_pedido})
+        
+            
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host='0.0.0.0', port=5000, log_level="info", reload=True)

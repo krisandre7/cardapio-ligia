@@ -80,3 +80,23 @@ def pedir_produto(db: Session, nome_produto: str):
         db.rollback()
         raise HTTPException(status_code=404, detail="Produto não encontrado")
     return db_pedido
+
+def efetuar_pedido(db: Session):
+    pedidos = db.query(models.Pedido).all()
+    lista_pedido = list()
+    valor_produto = 0
+    if len(pedidos) == 0:
+        raise HTTPException(status_code=400, detail="Lista de pedido vazia") 
+
+    for id_produto in pedidos: 
+        value_pedido = get_produto(db, id_produto)
+        if value_pedido is None:
+            raise HTTPException(status_code=404, detail="Nao possui valor no pedido")     
+        valor_produto += value_pedido.preco
+        lista_pedido.append(value_pedido)
+    return [valor_produto, lista_pedido]   
+        
+    
+        
+            
+    
