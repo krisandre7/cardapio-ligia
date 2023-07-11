@@ -63,7 +63,7 @@ def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
     if tipo != 0 and tipo != 1:
         return HTTPException(status_code=400, detail="Número inválido. Por favor coloque 0 ou 1")
     produtos = crud.get_produtos_tipos(db, tipo)
-    return produtos
+    return JSONResponse(status_code=200, content=produtos)
 
 @app.post("/produtos/")
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
