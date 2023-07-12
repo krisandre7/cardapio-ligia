@@ -1,3 +1,4 @@
+import re
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -22,13 +23,13 @@ def clear_db(db: Session):
     db.commit()
     return {"message": "Banco de dados limpo"}
 
-def create_produto(db: Session, produto: schemas.ProdutoCreate):
+def cadastrar_produto(db: Session, produto: schemas.ProdutoCreate):
     #verifica se o produto é vazio
-    if produto.nome == "" or produto.nome == " ":
-        raise HTTPException(status_code=400, detail="Nome invalido")
+    if re.match("\w", produto.nome) is None:
+        raise HTTPException(status_code=400, detail="Nome inválido")
     #verifica se a descrição é vazio
     if not produto.descricao:
-        raise HTTPException(status_code=400, detail="A descrição não pode ser vazio")
+        raise HTTPException(status_code=400, detail="A descrição não pode ser vazia")
     #verifica se o preço é diferente de zero ou negativo
     if produto.preco <= 0:
         raise HTTPException(status_code=400, detail="O valor precisa ser maior que zero")
@@ -46,17 +47,7 @@ def create_produto(db: Session, produto: schemas.ProdutoCreate):
         db.refresh(db_produto)
     except IntegrityError:
         #verifica se o produto já foi adicionado no banco de dados
-        raise HTTPException(status_code=400, detail="Produto já foi adicionado")
-def cadastrar_produto(db: Session, produto: schemas.ProdutoCreate):
-    db_produto = models.Produto(nome=produto.nome,
-                                preco=produto.preco,
-                                descricao=produto.descricao, 
-                                tipo=produto.tipo)
-    db.add(db_produto)
-    db.commit()
-    db.refresh(db_produto)
-    return db_produto
-        
+        raise HTTPException(status_code=400, detail="Produto já foi adicionado")        
 
 def update_produto(db: Session, produto: schemas.ProdutoCreate):
     db_produto = models.Produto(nome=produto.nome, 

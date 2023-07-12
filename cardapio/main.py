@@ -43,8 +43,11 @@ def clear_db(db: Session = Depends(get_db)):
 
 @app.post("/produtos/")
 def cadastrar_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
-    crud.cadastrar_produto(db, produto)
-    return {"message": "Produto criado com sucesso"}
+    try:
+        produto = crud.cadastrar_produto(db, produto)
+    except  HTTPException as e:
+        raise e
+    return JSONResponse(status_code=200, content={"message": "Produto adicionado com sucesso"})
 
 @app.put("/produtos/")
 def update_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
@@ -61,13 +64,6 @@ def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
     produtos = crud.get_produtos_tipos(db, tipo)
     return produtos
 
-@app.post("/produtos/")
-def cadastrar_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
-    try:
-        produto = crud.cadastrar_produto(db, produto)
-    except  HTTPException as e:
-        raise e
-    return JSONResponse(status_code=200, content={"message": "Produto adicionado com sucesso"})
    
 @app.post("/pedido/{nome_produto}")
 def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
