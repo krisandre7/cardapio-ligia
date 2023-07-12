@@ -15,6 +15,9 @@ def get_produto(db: Session, id_produto: int):
 def get_produtos(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Produto).offset(skip).limit(limit).all()
 
+def get_produtos_tipos(db: Session, tipo: int):
+    return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
+
 def delete_produtos(db: Session):
     db.query(models.Produto).delete()
     db.commit()

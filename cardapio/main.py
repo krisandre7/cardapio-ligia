@@ -52,15 +52,18 @@ def read_root():
 def clear_db(db: Session = Depends(get_db)):
     return crud.clear_db(db)
 
-@app.get("/produtos/{produto_id}", response_model=list[schemas.Produto])
-def read_produto(produto_id: int, db: Session = Depends(get_db)):
-    produto = crud.get_produto(db, produto_id)
-    return produto
-
 @app.get("/produtos/", response_model=list[schemas.Produto])
 def read_produtos(db: Session = Depends(get_db)):
     produtos = crud.get_produtos(db)
     return produtos
+
+
+@app.get("/produtos/{tipo}")
+def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
+    if tipo != 0 and tipo != 1:
+        return HTTPException(status_code=400, detail="Número inválido. Por favor coloque 0 ou 1")
+    produtos = crud.get_produtos_tipos(db, tipo)
+    return JSONResponse(status_code=200, content=produtos)
 
 @app.post("/produtos/")
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
