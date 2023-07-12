@@ -57,27 +57,29 @@ def get_produtos_tipos(db: Session, tipo: int):
     return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
 
 def pedir_produto(db: Session, nome_produto: str):
-    
     produto = db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
     
     if produto is None:
         raise HTTPException(status_code=404, detail="Produto não existe")
     
-    pedido = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
-    
-    if pedido is not None:
-        raise HTTPException(status_code=400, detail="Produto já pedido")
-    
-    db_pedido = models.Pedido(id_produto=produto.id)
+    pedido_atual = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
     
     try:
-        db.add(db_pedido)
-        db.commit()
-        db.refresh(db_pedido)
+        if pedido_atual is not None:
+            pedido_novo = models.Pedido(id_produto=pedido_atual.id_produto,
+                                        quantidade=pedido_atual.quantidade + 1,
+                                        produto=pedido_atual.produto)
+            pedido_atual.quantidade = pedido_novo.quantidade
+            db.commit()
+            db.refresh(pedido_atual)
+        else:
+            pedido_novo = models.Pedido(id_produto=produto.id, quantidade=1) 
+            db.add(pedido_novo)
+            db.commit()
+            db.refresh(pedido_novo)
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=404, detail="Produto não encontrado")
-    return db_pedido
 
 def efetuar_pedido(db: Session):
     pedidos = db.query(models.Pedido).all()

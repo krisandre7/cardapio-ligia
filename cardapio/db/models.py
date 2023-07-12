@@ -14,6 +14,7 @@ class Pedido(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     id_produto = Column(Integer, ForeignKey("produtos.id"))
+    quantidade = Column(Integer)
 
     produto = relationship("Produto")
 
