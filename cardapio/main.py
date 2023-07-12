@@ -58,12 +58,12 @@ def read_produtos(db: Session = Depends(get_db)):
     return produtos
 
 
-@app.get("/produtos/{tipo}")
+@app.get("/produtos/{tipo}", response_model=list[schemas.Produto])
 def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
     if tipo != 0 and tipo != 1:
         return HTTPException(status_code=400, detail="Número inválido. Por favor coloque 0 ou 1")
     produtos = crud.get_produtos_tipos(db, tipo)
-    return JSONResponse(status_code=200, content=produtos)
+    return produtos
 
 @app.post("/produtos/")
 def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
@@ -91,7 +91,7 @@ def efetuar_pedido(db: Session = Depends(get_db)):
     valor_total = 0
     lista_de_pedido = list()
     try:
-        [valor_total, lista_de_pedido] = crud.efetuar_pedido()
+        [valor_total, lista_de_pedido] = crud.efetuar_pedido(db)
     except HTTPException as e:
         raise e 
     return JSONResponse(status_code=200, content={"valor_total": valor_total,
