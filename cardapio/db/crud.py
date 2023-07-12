@@ -9,8 +9,8 @@ try:
 except ImportError:
     from cardapio.db import models, schemas
 
-def get_produto(db: Session, id_produto: int):
-    return db.query(models.Produto).filter(models.Produto.id == id_produto).first()
+def get_produto(db: Session, nome_produto: str):
+    return db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
 
 def delete_pedidos(db: Session):
     db.query(models.Pedido).delete()
@@ -69,6 +69,15 @@ def update_produto(db: Session, produto: schemas.ProdutoCreate):
         print(e)
         db.rollback()
         raise HTTPException(status_code=404, detail="Produto não encontrado")
+    
+def delete_produto(db: Session, nome_produto: str):
+    produto = get_produto(db, nome_produto)
+    
+    if produto is None:
+        raise HTTPException(status_code=404, detail="Produto não existe")
+        
+    db.delete(produto)
+    db.commit()
 
 def get_produtos_tipos(db: Session, tipo: int):
     return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
