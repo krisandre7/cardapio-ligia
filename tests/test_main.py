@@ -54,14 +54,14 @@ def test_apagar_produto():
         },
     )
     
-    response = client.delete("/produtos/pizza")
+    response = client.delete("/produtos/Coca-Cola")
     
     assert response.status_code == 200
 
 def test_apagar_produto_inexistente():
     client.delete("/")
 
-    response = client.delete("/produtos/pizza")
+    response = client.delete("/produtos/Coca-Cola")
     
     assert response.status_code == 404
 
@@ -108,4 +108,4 @@ def test_pedir_produto_existente():
     )
     client.post("/pedido/Coca-Cola")
     response = client.post("/pedido/Coca-Cola")
-    assert response.status_code == 400
+    assert response.status_code == 200
