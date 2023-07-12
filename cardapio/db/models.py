@@ -12,8 +12,7 @@ except ImportError:
 class Pedido(Base):
     __tablename__ = "pedidos"
 
-    id = Column(Integer, primary_key=True, index=True)
-    id_produto = Column(Integer, ForeignKey("produtos.id"))
+    id_produto = Column(Integer, ForeignKey("produtos.id"),  primary_key=True, index=True)
     quantidade = Column(Integer)
 
     produto = relationship("Produto")
