@@ -8,20 +8,8 @@ try:
 except ImportError:
     from cardapio.db import models, schemas
 
-
 def get_produto(db: Session, id_produto: int):
     return db.query(models.Produto).filter(models.Produto.id == id_produto).first()
-
-def get_produtos(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Produto).offset(skip).limit(limit).all()
-
-def get_produtos_tipos(db: Session, tipo: int):
-    return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
-
-def delete_produtos(db: Session):
-    db.query(models.Produto).delete()
-    db.commit()
-    return {"message": "Produtos deletados com sucesso"}
 
 def clear_db(db: Session):
     db.query(models.Pedido).delete()
@@ -29,7 +17,7 @@ def clear_db(db: Session):
     db.commit()
     return {"message": "Banco de dados limpo"}
 
-def create_produto(db: Session, produto: schemas.ProdutoCreate):
+def cadastrar_produto(db: Session, produto: schemas.ProdutoCreate):
     db_produto = models.Produto(nome=produto.nome,
                                 preco=produto.preco,
                                 descricao=produto.descricao, 
@@ -60,13 +48,15 @@ def update_produto(db: Session, produto: schemas.ProdutoCreate):
         db.rollback()
         raise HTTPException(status_code=404, detail="Produto não encontrado")
 
+def get_produtos_tipos(db: Session, tipo: int):
+    return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
 
 def pedir_produto(db: Session, nome_produto: str):
     
     produto = db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
     
     if produto is None:
-        raise HTTPException(status_code=400, detail="Produto não existe")
+        raise HTTPException(status_code=404, detail="Produto não existe")
     
     pedido = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
     

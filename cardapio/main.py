@@ -44,30 +44,13 @@ class Item(BaseModel):
 
 items: list = []
 
-@app.get("/")
-def read_root():
-    return JSONResponse(status_code=200, content={"message": "Salve Salve Família"})
-
 @app.delete("/")
 def clear_db(db: Session = Depends(get_db)):
     return crud.clear_db(db)
 
-@app.get("/produtos/", response_model=list[schemas.Produto])
-def read_produtos(db: Session = Depends(get_db)):
-    produtos = crud.get_produtos(db)
-    return produtos
-
-
-@app.get("/produtos/{tipo}", response_model=list[schemas.Produto])
-def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
-    if tipo != 0 and tipo != 1:
-        return HTTPException(status_code=400, detail="Número inválido. Por favor coloque 0 ou 1")
-    produtos = crud.get_produtos_tipos(db, tipo)
-    return produtos
-
 @app.post("/produtos/")
-def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
-    crud.create_produto(db, produto)
+def cadastrar_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
+    crud.cadastrar_produto(db, produto)
     return {"message": "Produto criado com sucesso"}
 
 @app.put("/produtos/")
@@ -77,6 +60,13 @@ def update_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)
     except HTTPException as e:
         raise e
     return {"message": "Produto atualizado com sucesso!"}
+
+@app.get("/produtos/{tipo}", response_model=list[schemas.Produto])
+def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
+    if tipo != 0 and tipo != 1:
+        return HTTPException(status_code=400, detail="Número inválido. Por favor coloque 0 ou 1")
+    produtos = crud.get_produtos_tipos(db, tipo)
+    return produtos
 
 @app.post("/pedido/{nome_produto}")
 def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):

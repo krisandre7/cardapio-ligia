@@ -41,8 +41,8 @@ def test_atualizar_produto():
     )
     
     assert response.status_code == 200
-
-def test_listar_produtos():
+    
+def test_listar_produtos_tipo():
     response = client.delete('/')
     response = client.post(
         "/produtos/",
@@ -64,8 +64,8 @@ def test_listar_produtos():
     )
 
     response = client.get("/produtos/0")
-    print(response)
     assert response.status_code == 200
+    print(response.content)
 
 def test_pedir_produto_nao_existe():
     client.delete('/')
