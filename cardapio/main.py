@@ -37,13 +37,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: bool
-
-items: list = []
-
 @app.delete("/")
 def clear_db(db: Session = Depends(get_db)):
     return crud.clear_db(db)
