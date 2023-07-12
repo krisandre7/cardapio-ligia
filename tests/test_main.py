@@ -41,7 +41,30 @@ def test_atualizar_produto():
     )
     
     assert response.status_code == 200
+
+def test_apagar_produto():
+    client.delete("/")
+    response = client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Refrigerante de cola",
+            "preco": 5.0,
+            "tipo": 1
+        },
+    )
     
+    response = client.delete("/produtos/pizza")
+    
+    assert response.status_code == 200
+
+def test_apagar_produto_inexistente():
+    client.delete("/")
+
+    response = client.delete("/produtos/pizza")
+    
+    assert response.status_code == 404
+
 def test_listar_produtos_tipo():
     response = client.delete('/')
     response = client.post(
