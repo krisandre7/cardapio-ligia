@@ -21,13 +21,13 @@ class Produto(ProdutoBase):
 
 class PedidoBase(BaseModel):
     id_produto: int
+    quantidade: int
 
 
 class PedidoCreate(PedidoBase):
     pass
 
 class Pedido(PedidoBase):
-    id: int
     produto: Produto
 
     class Config:

@@ -11,6 +11,11 @@ except ImportError:
 def get_produto(db: Session, id_produto: int):
     return db.query(models.Produto).filter(models.Produto.id == id_produto).first()
 
+def delete_pedidos(db: Session):
+    db.query(models.Pedido).delete()
+    db.commit()
+    return {"message": "Pedidos deletados com sucesso"}
+
 def clear_db(db: Session):
     db.query(models.Pedido).delete()
     db.query(models.Produto).delete()
@@ -52,42 +57,51 @@ def get_produtos_tipos(db: Session, tipo: int):
     return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
 
 def pedir_produto(db: Session, nome_produto: str):
-    
     produto = db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
     
     if produto is None:
         raise HTTPException(status_code=404, detail="Produto não existe")
     
-    pedido = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
-    
-    if pedido is not None:
-        raise HTTPException(status_code=400, detail="Produto já pedido")
-    
-    db_pedido = models.Pedido(id_produto=produto.id)
+    pedido_atual = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
     
     try:
-        db.add(db_pedido)
-        db.commit()
-        db.refresh(db_pedido)
+        if pedido_atual is not None:
+            pedido_novo = models.Pedido(id_produto=pedido_atual.id_produto,
+                                        quantidade=pedido_atual.quantidade + 1,
+                                        produto=pedido_atual.produto)
+            pedido_atual.quantidade = pedido_novo.quantidade
+            db.commit()
+            db.refresh(pedido_atual)
+        else:
+            pedido_novo = models.Pedido(id_produto=produto.id, quantidade=1) 
+            db.add(pedido_novo)
+            db.commit()
+            db.refresh(pedido_novo)
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=404, detail="Produto não encontrado")
-    return db_pedido
 
 def efetuar_pedido(db: Session):
     pedidos = db.query(models.Pedido).all()
-    lista_pedido = list()
-    valor_produto = 0
+    produtos_pedidos: list[schemas.Produto] = []
+    preco_total: float = 0
+
     if len(pedidos) == 0:
         raise HTTPException(status_code=400, detail="Lista de pedido vazia") 
 
-    for id_produto in pedidos: 
-        value_pedido = get_produto(db, id_produto)
-        if value_pedido is None:
-            raise HTTPException(status_code=404, detail="Nao possui valor no pedido")     
-        valor_produto += value_pedido.preco
-        lista_pedido.append(value_pedido)
-    return [valor_produto, lista_pedido]   
+    for pedido_db in pedidos:
+        produto = schemas.Produto(id=pedido_db.produto.id,
+                                nome=pedido_db.produto.nome,
+                                descricao=pedido_db.produto.descricao,
+                                preco=pedido_db.produto.preco,
+                                tipo=pedido_db.produto.tipo)
+        pedido = schemas.Pedido(id_produto=pedido_db.id_produto,
+                                quantidade=pedido_db.quantidade,
+                                produto=produto)
+        preco_total += produto.preco * pedido.quantidade
+    
+    # delete_pedidos(db)
+    return preco_total
         
     
         

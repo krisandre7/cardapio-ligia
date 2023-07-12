@@ -37,13 +37,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: bool
-
-items: list = []
-
 @app.delete("/")
 def clear_db(db: Session = Depends(get_db)):
     return crud.clear_db(db)
@@ -78,14 +71,13 @@ def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
 
 @app.get("/pedido/")
 def efetuar_pedido(db: Session = Depends(get_db)):
-    valor_total = 0
-    lista_de_pedido = list()
+    preco_total: float = 0
+    produtos_pedidos: list[schemas.Produto] = []
     try:
-        [valor_total, lista_de_pedido] = crud.efetuar_pedido(db)
+        preco_total = crud.efetuar_pedido(db)
     except HTTPException as e:
         raise e 
-    return JSONResponse(status_code=200, content={"valor_total": valor_total,
-        "Lista_de_pedidos": lista_de_pedido})
+    return {"preco_total": preco_total, "produtos_pedidos": produtos_pedidos}
         
             
 
