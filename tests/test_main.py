@@ -59,8 +59,8 @@ def test_pedir_produto_existente():
         "/produtos/",
         json={
             "nome": "Coca-Cola",
-            "descricao": "Refrigerante de cola",
-            "preco": 5.0,
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
             "tipo": 1
         },
     )
