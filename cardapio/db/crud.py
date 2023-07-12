@@ -89,17 +89,19 @@ def efetuar_pedido(db: Session):
     if len(pedidos) == 0:
         raise HTTPException(status_code=400, detail="Lista de pedido vazia") 
 
-    for pedido in pedidos:
-        produto = schemas.Produto(id=pedido.produto.id,
-                                nome=pedido.produto.nome,
-                                descricao=pedido.produto.descricao,
-                                preco=pedido.produto.preco,
-                                tipo=pedido.produto.tipo)
-        preco_total += produto.preco
-        produtos_pedidos.append(produto)
+    for pedido_db in pedidos:
+        produto = schemas.Produto(id=pedido_db.produto.id,
+                                nome=pedido_db.produto.nome,
+                                descricao=pedido_db.produto.descricao,
+                                preco=pedido_db.produto.preco,
+                                tipo=pedido_db.produto.tipo)
+        pedido = schemas.Pedido(id_produto=pedido_db.id_produto,
+                                quantidade=pedido_db.quantidade,
+                                produto=produto)
+        preco_total += produto.preco * pedido.quantidade
     
     # delete_pedidos(db)
-    return preco_total, produtos_pedidos
+    return preco_total
         
     
         

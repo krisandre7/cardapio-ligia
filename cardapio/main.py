@@ -81,7 +81,7 @@ def efetuar_pedido(db: Session = Depends(get_db)):
     preco_total: float = 0
     produtos_pedidos: list[schemas.Produto] = []
     try:
-        preco_total, produtos_pedidos = crud.efetuar_pedido(db)
+        preco_total = crud.efetuar_pedido(db)
     except HTTPException as e:
         raise e 
     return {"preco_total": preco_total, "produtos_pedidos": produtos_pedidos}
