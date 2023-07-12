@@ -80,6 +80,14 @@ def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
         raise e
     return JSONResponse(status_code=200, content={"message": "Produto pedido com sucesso!"})
 
+@app.delete("/pedido/{nome_produto}")
+def remover_pedido(nome_produto: str, db: Session = Depends(get_db)):
+    try:
+        crud.remover_pedido(db, nome_produto)
+    except HTTPException as e:
+        raise e
+    return JSONResponse(status_code=200, content={"message": "Produto removido do pedido com sucesso!"})
+
 @app.get("/pedido/")
 def efetuar_pedido(db: Session = Depends(get_db)):
     preco_total: float = 0
