@@ -62,9 +62,9 @@ def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
     return produtos
 
 @app.post("/produtos/")
-def create_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
+def cadastrar_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
     try:
-        produto = crud.create_produto(db, produto)
+        produto = crud.cadastrar_produto(db, produto)
     except  HTTPException as e:
         raise e
     return JSONResponse(status_code=200, content={"message": "Produto adicionado com sucesso"})
