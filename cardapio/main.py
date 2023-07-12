@@ -78,14 +78,13 @@ def pedir_produto(nome_produto: str, db: Session = Depends(get_db)):
 
 @app.get("/pedido/")
 def efetuar_pedido(db: Session = Depends(get_db)):
-    valor_total = 0
-    lista_de_pedido = list()
+    preco_total: float = 0
+    produtos_pedidos: list[schemas.Produto] = []
     try:
-        [valor_total, lista_de_pedido] = crud.efetuar_pedido(db)
+        preco_total, produtos_pedidos = crud.efetuar_pedido(db)
     except HTTPException as e:
         raise e 
-    return JSONResponse(status_code=200, content={"valor_total": valor_total,
-        "Lista_de_pedidos": lista_de_pedido})
+    return {"preco_total": preco_total, "produtos_pedidos": produtos_pedidos}
         
             
 

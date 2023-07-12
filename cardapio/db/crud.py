@@ -11,6 +11,11 @@ except ImportError:
 def get_produto(db: Session, id_produto: int):
     return db.query(models.Produto).filter(models.Produto.id == id_produto).first()
 
+def delete_pedidos(db: Session):
+    db.query(models.Pedido).delete()
+    db.commit()
+    return {"message": "Pedidos deletados com sucesso"}
+
 def clear_db(db: Session):
     db.query(models.Pedido).delete()
     db.query(models.Produto).delete()
@@ -76,18 +81,23 @@ def pedir_produto(db: Session, nome_produto: str):
 
 def efetuar_pedido(db: Session):
     pedidos = db.query(models.Pedido).all()
-    lista_pedido = list()
-    valor_produto = 0
+    produtos_pedidos: list[schemas.Produto] = []
+    preco_total: float = 0
+
     if len(pedidos) == 0:
         raise HTTPException(status_code=400, detail="Lista de pedido vazia") 
 
-    for id_produto in pedidos: 
-        value_pedido = get_produto(db, id_produto)
-        if value_pedido is None:
-            raise HTTPException(status_code=404, detail="Nao possui valor no pedido")     
-        valor_produto += value_pedido.preco
-        lista_pedido.append(value_pedido)
-    return [valor_produto, lista_pedido]   
+    for pedido in pedidos:
+        produto = schemas.Produto(id=pedido.produto.id,
+                                nome=pedido.produto.nome,
+                                descricao=pedido.produto.descricao,
+                                preco=pedido.produto.preco,
+                                tipo=pedido.produto.tipo)
+        preco_total += produto.preco
+        produtos_pedidos.append(produto)
+    
+    # delete_pedidos(db)
+    return preco_total, produtos_pedidos
         
     
         
