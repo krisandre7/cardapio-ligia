@@ -1,0 +1,1139 @@
+{
+	"info": {
+		"_postman_id": "90ea9ecd-9c0e-4be0-988c-591c1e87699a",
+		"name": "Cardápio Lígia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28402512",
+		"_collection_link": "https://tpv-ligia.postman.co/workspace/Team-Workspace~6f7a655e-0d87-44d1-8e0b-09ef6b4baee1/collection/28402512-90ea9ecd-9c0e-4be0-988c-591c1e87699a?action=share&creator=28402512&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Cadastrar produto",
+			"item": [
+				{
+					"name": "Limpa base",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Base limpa\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Banco de dados limpo\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto criado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 22.50,\r\n    \"descricao\": \"Essa daqui é boa mesmo\",\r\n    \"tipo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Atualizar produto",
+			"item": [
+				{
+					"name": "Limpa base",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Base limpa\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Banco de dados limpo\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto adicionado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto adicionado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 22.50,\r\n    \"descricao\": \"Essa daqui é boa mesmo\",\r\n    \"tipo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto atualizado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto atualizado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 2.50,\r\n    \"descricao\": \"Essa daqui é ruim mesmo\",\r\n    \"tipo\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Apagar produto",
+			"item": [
+				{
+					"name": "Limpa base",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Base limpa\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Banco de dados limpo\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto criado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 22.50,\r\n    \"descricao\": \"Essa daqui é boa mesmo\",\r\n    \"tipo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apaga produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto apagado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto apagado com sucesso!\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/pizza",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								"pizza"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Listar produtos por comida ou bebida",
+			"item": [
+				{
+					"name": "Limpa base",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Base limpa\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Banco de dados limpo\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar comida",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comida criada\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 22.50,\r\n    \"descricao\": \"Essa daqui é boa mesmo\",\r\n    \"tipo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar bebida",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Bebida criada\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pepsi\",\r\n    \"preco\": 3.50,\r\n    \"descricao\": \"Essa daqui é ruim hein\",\r\n    \"tipo\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar comidas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Lista comidas\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody([\r",
+									"        {\r",
+									"            \"nome\": \"pizza\",\r",
+									"            \"descricao\": \"Essa daqui é boa mesmo\",\r",
+									"            \"preco\": 22.5,\r",
+									"            \"tipo\": 0,\r",
+									"            \"id\": 22\r",
+									"        }\r",
+									"    ]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/0",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Adiciona item ao pedido",
+			"item": [
+				{
+					"name": "Limpa base",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Base limpa\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Banco de dados limpo\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto criado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 22.50,\r\n    \"descricao\": \"Essa daqui é boa mesmo\",\r\n    \"tipo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar produto ao pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto adicionado a pedido\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto pedido com sucesso!\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/pedido/pizza",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"pedido",
+								"pizza"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Remover item do pedido",
+			"item": [
+				{
+					"name": "Limpa base",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Base limpa\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Banco de dados limpo\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto criado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 22.50,\r\n    \"descricao\": \"Essa daqui é boa mesmo\",\r\n    \"tipo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar produto ao pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto adicionado a pedido\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto pedido com sucesso!\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/pedido/pizza",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"pedido",
+								"pizza"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover produto do pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto removido do pedido\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto removido do pedido com sucesso!\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/pedido/pizza",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"pedido",
+								"pizza"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Efetuar pedido",
+			"item": [
+				{
+					"name": "Limpa base",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Base limpa\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Banco de dados limpo\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar comida",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto criado\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pizza\",\r\n    \"preco\": 22.50,\r\n    \"descricao\": \"Essa daqui é boa mesmo\",\r\n    \"tipo\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos/",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar bebida",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Bebida criada\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto criado com sucesso\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"pepsi\",\r\n    \"preco\": 3.50,\r\n    \"descricao\": \"Essa daqui é ruim hein\",\r\n    \"tipo\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/produtos",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar comida ao pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto adicionado a pedido\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto pedido com sucesso!\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/pedido/pizza",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"pedido",
+								"pizza"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar comida ao pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto adicionado a pedido\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto pedido com sucesso!\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/pedido/pizza",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"pedido",
+								"pizza"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adicionar bebida ao pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Produto adicionado a pedido\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.have.jsonBody({\"message\": \"Produto pedido com sucesso!\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/pedido/pepsi",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"pedido",
+								"pepsi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Efetuar pedido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{endereco_servidor}}:{{porta}}/pedido",
+							"protocol": "http",
+							"host": [
+								"{{endereco_servidor}}"
+							],
+							"port": "{{porta}}",
+							"path": [
+								"pedido"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "endereco_servidor",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "porta",
+			"value": "5000",
+			"type": "string"
+		},
+		{
+			"key": "id_produto_adicionar",
+			"value": "pizza"
+		}
+	]
+}
