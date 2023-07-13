@@ -153,7 +153,6 @@ def test_listar_produtos_tipo():
 
     response = client.get("/produtos/0")
     assert response.status_code == 200
-    print(response.content)
 
 def test_pedir_produto():
     client.delete('/')
