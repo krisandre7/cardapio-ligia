@@ -109,3 +109,42 @@ def test_pedir_produto_existente():
     client.post("/pedido/Coca-Cola")
     response = client.post("/pedido/Coca-Cola")
     assert response.status_code == 200
+    
+def test_remover_pedido():
+    client.delete('/')
+    client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
+            "tipo": 1
+        },
+    )
+    
+    response = client.post("/pedido/Coca-Cola")
+    response = client.delete("/pedido/Coca-Cola")
+    
+    assert response.status_code == 200
+
+def test_remover_pedido_produto_inexistente():
+    client.delete('/')
+    client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
+            "tipo": 1
+        },
+    )
+    
+    response = client.delete("/pedido/Coca-Cola")
+    
+    assert response.status_code == 404
+
+def test_remover_pedido_inexistente():
+    client.delete('/')
+    response = client.delete("/pedido/Coca-Cola")
+    
+    assert response.status_code == 404

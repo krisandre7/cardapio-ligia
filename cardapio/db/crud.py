@@ -15,7 +15,6 @@ def get_produto(db: Session, nome_produto: str):
 def delete_pedidos(db: Session):
     db.query(models.Pedido).delete()
     db.commit()
-    return {"message": "Pedidos deletados com sucesso"}
 
 def clear_db(db: Session):
     db.query(models.Pedido).delete()
@@ -25,7 +24,7 @@ def clear_db(db: Session):
 
 def cadastrar_produto(db: Session, produto: schemas.ProdutoCreate):
     #verifica se o produto é vazio
-    if re.match("\w", produto.nome) is None:
+    if re.match(r"\w", produto.nome) is None:
         raise HTTPException(status_code=400, detail="Nome inválido")
     #verifica se a descrição é vazio
     if not produto.descricao:
@@ -83,7 +82,7 @@ def get_produtos_tipos(db: Session, tipo: int):
     return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
 
 def pedir_produto(db: Session, nome_produto: str):
-    produto = db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
+    produto = get_produto(db, nome_produto)
     
     if produto is None:
         raise HTTPException(status_code=404, detail="Produto não existe")
@@ -106,6 +105,20 @@ def pedir_produto(db: Session, nome_produto: str):
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=404, detail="Produto não encontrado")
+    
+def remover_pedido(db: Session, nome_produto: str):
+    produto = get_produto(db, nome_produto)
+    
+    if produto is None:
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
+    
+    pedido = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
+    
+    if pedido is None:
+        raise HTTPException(status_code=404, detail="Produto não encontrado no pedido")  
+    
+    db.delete(pedido)
+    db.commit()
 
 def efetuar_pedido(db: Session):
     pedidos = db.query(models.Pedido).all()
@@ -126,7 +139,7 @@ def efetuar_pedido(db: Session):
                                 produto=produto)
         preco_total += produto.preco * pedido.quantidade
     
-    # delete_pedidos(db)
+    delete_pedidos(db)
     return preco_total
         
     
