@@ -117,7 +117,7 @@ def remover_pedido(db: Session, nome_produto: str):
     if pedido is None:
         raise HTTPException(status_code=404, detail="Produto não encontrado no pedido")
     
-    pedido.delete(produto)
+    db.delete(pedido)
     db.commit()
 
 def efetuar_pedido(db: Session):
