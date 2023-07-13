@@ -14,6 +14,9 @@ except ImportError:
 def get_produto(db: Session, nome_produto: str):
     return db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
 
+def get_pedido(db: Session):
+    return db.query(models.Pedido).all()
+
 def clear_db(db: Session):
     db.query(models.Pedido).delete()
     db.query(models.Produto).delete()
@@ -48,21 +51,16 @@ def update_produto(db: Session, produto: schemas.ProdutoCreate):
                                 preco=produto.preco, 
                                 tipo=int(produto.tipo), 
                                 descricao=produto.descricao)
-    produto_antigo = db.query(models.Produto).filter(models.Produto.nome == db_produto.nome).first()
+    produto_atual = db.query(models.Produto).filter(models.Produto.nome == db_produto.nome).first()
     
-    if produto_antigo is None:
-        raise HTTPException(status_code=400, detail="Produto com esse nome não existe.")
+    if produto_atual is None:
+        raise HTTPException(status_code=404, detail="Produto com esse nome não existe.")
     
-    try: 
-        produto_antigo.descricao = db_produto.descricao
-        produto_antigo.preco =  db_produto.preco
-        produto_antigo.tipo = TipoProduto(db_produto.tipo)
-        db.commit()
-        db.refresh(produto_antigo)
-    except IntegrityError as e:
-        print(e)
-        db.rollback()
-        raise HTTPException(status_code=404, detail="Produto não encontrado")
+    produto_atual.descricao = db_produto.descricao
+    produto_atual.preco =  db_produto.preco
+    produto_atual.tipo = db_produto.tipo
+    db.commit()
+    db.refresh(produto_atual)
     
 def delete_produto(db: Session, nome_produto: str):
     produto = get_produto(db, nome_produto)
@@ -112,12 +110,12 @@ def remover_pedido(db: Session, nome_produto: str):
     db.commit()
 
 def efetuar_pedido(db: Session):
-    pedidos = db.query(models.Pedido).all()
+    pedidos = get_pedido(db)
     produtos_pedidos: list[schemas.Produto] = []
     preco_total: float = 0
 
     if len(pedidos) == 0:
-        raise HTTPException(status_code=400, detail="Lista de pedido vazia") 
+        raise HTTPException(status_code=404, detail="Lista de pedido vazia") 
 
     for pedido_db in pedidos:
         produto = schemas.Produto(id=pedido_db.produto.id,

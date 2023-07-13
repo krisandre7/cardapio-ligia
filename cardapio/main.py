@@ -43,6 +43,11 @@ app.add_middleware(
 def clear_db(db: Session = Depends(get_db)):
     return crud.clear_db(db)
 
+@app.get("/pedido/")
+def get_pedido(db: Session = Depends(get_db)):
+    pedido = crud.get_pedido(db)
+    return pedido
+
 @app.post("/produtos/")
 def cadastrar_produto(produto: schemas.ProdutoCreate, db: Session = Depends(get_db)):
     try:
@@ -88,15 +93,14 @@ def remover_pedido(nome_produto: str, db: Session = Depends(get_db)):
         raise e
     return JSONResponse(status_code=200, content={"message": "Produto removido do pedido com sucesso!"})
 
-@app.get("/pedido/")
+@app.post("/pedido/")
 def efetuar_pedido(db: Session = Depends(get_db)):
     preco_total: float = 0
-    produtos_pedidos: list[schemas.Produto] = []
     try:
         preco_total = crud.efetuar_pedido(db)
     except HTTPException as e:
         raise e 
-    return {"preco_total": preco_total, "produtos_pedidos": produtos_pedidos}
+    return {"preco_total": preco_total}
         
             
 

@@ -4,6 +4,23 @@ from cardapio.main import app
 
 client = TestClient(app)
 
+def test_get_pedido():
+    client.delete('/')
+    client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
+            "tipo": 1
+        },
+    )
+    
+    client.post("/pedido/Coca-Cola")
+    response = client.get("/pedido/")
+    
+    assert response.status_code == 200
+
 def test_cadastrar_produto():
     response = client.delete('/')
     response = client.post(
@@ -106,6 +123,20 @@ def test_atualizar_produto():
     )
     
     assert response.status_code == 200
+
+def test_atualizar_produto_inexistente():
+    client.delete('/')
+    response = client.put(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
+            "tipo": 1
+        },
+    )
+    
+    assert response.status_code == 404
 
 def test_apagar_produto():
     client.delete("/")
@@ -230,4 +261,61 @@ def test_remover_pedido_inexistente():
     client.delete('/')
     response = client.delete("/pedido/Coca-Cola")
     
+    assert response.status_code == 404
+    
+def test_efetuar_pedido():
+    client.delete('/')
+    client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
+            "tipo": 1
+        },
+    )
+    client.post(
+        "/produtos/",
+        json = {
+            "nome": "arroz",
+            "descricao": "alimentos de cesta básica 01",
+            "preco": 5.0,
+            "tipo": 0
+        },
+    )
+    
+    client.post("/pedido/Coca-Cola")
+    client.post("/pedido/Coca-Cola")
+    client.post("/pedido/arroz")
+    response = client.post("/pedido/")
+    
+    assert response.status_code == 200
+    assert response.json()['preco_total'] == 25
+    
+    response = client.get("/pedido/")
+    
+    assert len(response.json()) == 0
+    
+def test_efetuar_pedido_lista_vazia():
+    client.delete('/')
+    client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
+            "tipo": 1
+        },
+    )
+    client.post(
+        "/produtos/",
+        json = {
+            "nome": "arroz",
+            "descricao": "alimentos de cesta básica 01",
+            "preco": 5.0,
+            "tipo": 0
+        },
+    )
+    
+    response = client.post("/pedido/")
     assert response.status_code == 404
