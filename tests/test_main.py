@@ -90,6 +90,20 @@ def test_listar_produtos_tipo():
     assert response.status_code == 200
     print(response.content)
 
+def test_pedir_produto():
+    client.delete('/')
+    client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Coca Cola Trincando",
+            "preco": 10.0,
+            "tipo": 1
+        },
+    )
+    response = client.post("/pedido/Coca-Cola")
+    assert response.status_code == 200
+
 def test_pedir_produto_nao_existe():
     client.delete('/')
     response = client.post("/pedido/Coca-Cola")
