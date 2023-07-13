@@ -14,10 +14,6 @@ except ImportError:
 def get_produto(db: Session, nome_produto: str):
     return db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
 
-def delete_pedidos(db: Session):
-    db.query(models.Pedido).delete()
-    db.commit()
-
 def clear_db(db: Session):
     db.query(models.Pedido).delete()
     db.query(models.Produto).delete()
@@ -88,22 +84,18 @@ def pedir_produto(db: Session, nome_produto: str):
     
     pedido_atual = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
     
-    try:
-        if pedido_atual is not None:
-            pedido_novo = models.Pedido(id_produto=pedido_atual.id_produto,
-                                        quantidade=pedido_atual.quantidade + 1,
-                                        produto=pedido_atual.produto)
-            pedido_atual.quantidade = pedido_novo.quantidade
-            db.commit()
-            db.refresh(pedido_atual)
-        else:
-            pedido_novo = models.Pedido(id_produto=produto.id, quantidade=1) 
-            db.add(pedido_novo)
-            db.commit()
-            db.refresh(pedido_novo)
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=404, detail="Produto não encontrado")
+    if pedido_atual is not None:
+        pedido_novo = models.Pedido(id_produto=pedido_atual.id_produto,
+                                    quantidade=pedido_atual.quantidade + 1,
+                                    produto=pedido_atual.produto)
+        pedido_atual.quantidade = pedido_novo.quantidade
+        db.commit()
+        db.refresh(pedido_atual)
+    else:
+        pedido_novo = models.Pedido(id_produto=produto.id, quantidade=1) 
+        db.add(pedido_novo)
+        db.commit()
+        db.refresh(pedido_novo)
     
 def remover_pedido(db: Session, nome_produto: str):
     produto = get_produto(db, nome_produto)
@@ -138,7 +130,8 @@ def efetuar_pedido(db: Session):
                                 produto=produto)
         preco_total += produto.preco * pedido.quantidade
     
-    delete_pedidos(db)
+    db.query(models.Pedido).delete()
+    db.commit()
     return preco_total
         
     
