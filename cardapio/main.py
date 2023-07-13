@@ -9,9 +9,11 @@ from fastapi.responses import JSONResponse
 try:
     from db import models, schemas
     from db.database import SessionLocal, engine
+    from db.schemas import TipoProduto
     from db import crud
 except ImportError:
     from cardapio.db import models, schemas, crud
+    from cardapio.db.schemas import TipoProduto
     from cardapio.db.database import SessionLocal, engine
 
 # Configuração de acesso ao Banco de Dados
@@ -66,9 +68,7 @@ def apagar_produto(nome_produto: str, db: Session = Depends(get_db)):
     return {"message": "Produto apagado com sucesso!"}
 
 @app.get("/produtos/{tipo}", response_model=list[schemas.Produto])
-def listar_produtos_tipo(tipo: int, db: Session = Depends(get_db)):
-    if tipo != 0 and tipo != 1:
-        return HTTPException(status_code=400, detail="Número inválido. Por favor coloque 0 ou 1")
+def listar_produtos_tipo(tipo: TipoProduto, db: Session = Depends(get_db)):
     produtos = crud.get_produtos_tipos(db, tipo)
     return produtos
    

@@ -1,11 +1,15 @@
 from pydantic import BaseModel
+from enum import IntEnum
 
+class TipoProduto(IntEnum):
+    comida = 0
+    bebida = 1
 
 class ProdutoBase(BaseModel):
     nome: str
     descricao: str
     preco: float
-    tipo: int
+    tipo: TipoProduto
 
 
 class ProdutoCreate(ProdutoBase):

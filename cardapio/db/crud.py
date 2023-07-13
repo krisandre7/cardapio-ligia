@@ -6,8 +6,10 @@ from fastapi import HTTPException
 
 try:
     from db import models, schemas
+    from db.schemas import TipoProduto
 except ImportError:
     from cardapio.db import models, schemas
+    from cardapio.db.schemas import TipoProduto
 
 def get_produto(db: Session, nome_produto: str):
     return db.query(models.Produto).filter(models.Produto.nome == nome_produto).first()
@@ -27,20 +29,17 @@ def cadastrar_produto(db: Session, produto: schemas.ProdutoCreate):
     if re.match(r"\w", produto.nome) is None:
         raise HTTPException(status_code=400, detail="Nome inválido")
     #verifica se a descrição é vazio
-    if not produto.descricao:
+    if re.match(r"\w", produto.descricao) is None:
         raise HTTPException(status_code=400, detail="A descrição não pode ser vazia")
     #verifica se o preço é diferente de zero ou negativo
     if produto.preco <= 0:
         raise HTTPException(status_code=400, detail="O valor precisa ser maior que zero")
-    #verifica o tipo do produto
-    if produto.tipo != 0 and produto.tipo != 1:
-        raise HTTPException(status_code=400, detail="Tipo do produto desconhecido")
     
     try:
         db_produto = models.Produto(nome=produto.nome,
                                     preco=produto.preco,
                                     descricao=produto.descricao, 
-                                    tipo=produto.tipo)
+                                    tipo=int(produto.tipo))
         db.add(db_produto)
         db.commit()
         db.refresh(db_produto)
@@ -51,7 +50,7 @@ def cadastrar_produto(db: Session, produto: schemas.ProdutoCreate):
 def update_produto(db: Session, produto: schemas.ProdutoCreate):
     db_produto = models.Produto(nome=produto.nome, 
                                 preco=produto.preco, 
-                                tipo=produto.tipo, 
+                                tipo=int(produto.tipo), 
                                 descricao=produto.descricao)
     produto_antigo = db.query(models.Produto).filter(models.Produto.nome == db_produto.nome).first()
     
@@ -61,7 +60,7 @@ def update_produto(db: Session, produto: schemas.ProdutoCreate):
     try: 
         produto_antigo.descricao = db_produto.descricao
         produto_antigo.preco =  db_produto.preco
-        produto_antigo.tipo = db_produto.tipo
+        produto_antigo.tipo = TipoProduto(db_produto.tipo)
         db.commit()
         db.refresh(produto_antigo)
     except IntegrityError as e:
@@ -78,8 +77,8 @@ def delete_produto(db: Session, nome_produto: str):
     db.delete(produto)
     db.commit()
 
-def get_produtos_tipos(db: Session, tipo: int):
-    return db.query(models.Produto).filter(models.Produto.tipo == tipo).all()
+def get_produtos_tipos(db: Session, tipo: TipoProduto):
+    return db.query(models.Produto).filter(models.Produto.tipo == int(tipo)).all()
 
 def pedir_produto(db: Session, nome_produto: str):
     produto = get_produto(db, nome_produto)
@@ -133,7 +132,7 @@ def efetuar_pedido(db: Session):
                                 nome=pedido_db.produto.nome,
                                 descricao=pedido_db.produto.descricao,
                                 preco=pedido_db.produto.preco,
-                                tipo=pedido_db.produto.tipo)
+                                tipo=TipoProduto(pedido_db.produto.tipo))
         pedido = schemas.Pedido(id_produto=pedido_db.id_produto,
                                 quantidade=pedido_db.quantidade,
                                 produto=produto)

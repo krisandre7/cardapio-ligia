@@ -18,6 +18,71 @@ def test_cadastrar_produto():
     
     assert response.status_code == 200
     
+def test_cadastrar_produto_nome_invalido():
+    response = client.delete('/')
+    response = client.post(
+        "/produtos/",
+        json={
+            "nome": "",
+            "descricao": "Refrigerante de cola",
+            "preco": 5.0,
+            "tipo": 1
+        },
+    )
+    
+    assert response.status_code == 400
+
+def test_cadastrar_produto_desc_invalido():
+    response = client.delete('/')
+    response = client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "",
+            "preco": 5.0,
+            "tipo": 1
+        },
+    )
+    
+    assert response.status_code == 400
+    
+def test_cadastrar_produto_preco_invalido():
+    response = client.delete('/')
+    response = client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Refrigerante de cola",
+            "preco": 0,
+            "tipo": 1
+        },
+    )
+    
+    assert response.status_code == 400
+
+def test_cadastrar_produto_existente():
+    response = client.delete('/')
+    response = client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Refrigerante de cola",
+            "preco": 5.0,
+            "tipo": 1
+        },
+    )
+    response = client.post(
+        "/produtos/",
+        json={
+            "nome": "Coca-Cola",
+            "descricao": "Refrigerante de cola",
+            "preco": 5.0,
+            "tipo": 1
+        },
+    )
+    
+    assert response.status_code == 400
+
 def test_atualizar_produto():
     client.delete('/')
     client.post(
