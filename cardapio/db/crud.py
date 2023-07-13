@@ -24,7 +24,7 @@ def clear_db(db: Session):
 
 def cadastrar_produto(db: Session, produto: schemas.ProdutoCreate):
     #verifica se o produto é vazio
-    if re.match("\w", produto.nome) is None:
+    if re.match(r"\w", produto.nome) is None:
         raise HTTPException(status_code=400, detail="Nome inválido")
     #verifica se a descrição é vazio
     if not produto.descricao:
@@ -115,7 +115,7 @@ def remover_pedido(db: Session, nome_produto: str):
     pedido = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
     
     if pedido is None:
-        raise HTTPException(status_code=404, detail="Produto não encontrado no pedido")
+        raise HTTPException(status_code=404, detail="Produto não encontrado no pedido")  
     
     db.delete(pedido)
     db.commit()
