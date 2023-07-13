@@ -109,11 +109,16 @@ def pedir_produto(db: Session, nome_produto: str):
 def remover_pedido(db: Session, nome_produto: str):
     produto = get_produto(db, nome_produto)
     
-    if produto is not None:
+    if produto is None:
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
+    
+    pedido = db.query(models.Pedido).filter(models.Pedido.id_produto == produto.id).first()
+    
+    if pedido is None:
         raise HTTPException(status_code=404, detail="Produto não encontrado no pedido")
     
-    db.delete(produto);
-    db.commit();
+    pedido.delete(produto)
+    db.commit()
 
 def efetuar_pedido(db: Session):
     pedidos = db.query(models.Pedido).all()
